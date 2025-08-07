@@ -12,23 +12,33 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "take-colors.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "take-colors-sidebar",
+          "title": "Take Colors",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "take-colors-sidebar": [
+        {
+          "id": "take-colors-webview",
+          "name": "Take Colors",
+          "type": "webview"
+        }
+      ]
+    }
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack",
+    "vscode:prepublish": "npm run build",
+    "build": "npm run build-webview && webpack --mode production",
+    "build-webview": "npm install --prefix webview-ui && npm run build --prefix webview-ui",
     "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "npm run compile-tests && npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test"
+    "pretest": "npm run build && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
     "@types/vscode": "^1.102.0",
