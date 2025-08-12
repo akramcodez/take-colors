@@ -15,6 +15,23 @@ export class TakeColorsPanelProvider implements vscode.WebviewViewProvider {
     };
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+    webviewView.webview.onDidReceiveMessage((message) => {
+      switch (message.command) {
+        case "insertColor":
+          this._insertColorToActiveEditor(message.text);
+          break;
+      }
+    }, undefined);
+  }
+
+  private _insertColorToActiveEditor(color: string) {
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+      editor.edit((editBuilder) => {
+        editBuilder.insert(editor.selection.active, color);
+      });
+    }
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
@@ -44,7 +61,7 @@ export class TakeColorsPanelProvider implements vscode.WebviewViewProvider {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}'; img-src data: blob: ${webview.cspSource};">
         <title>Take Colors</title>
         <link rel="stylesheet" type="text/css" href="${styleUri}">
       </head>
