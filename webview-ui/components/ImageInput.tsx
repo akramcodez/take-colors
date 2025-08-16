@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 interface ImageInputProps {
   onImageSelect: (imageDataUrl: string) => void;
@@ -6,8 +6,34 @@ interface ImageInputProps {
 
 export const ImageInput: React.FC<ImageInputProps> = ({ onImageSelect }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState(140);
 
-  // This function reads a file and converts it to a Data URL
+  useEffect(() => {
+    const updateHeight = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.offsetWidth;
+        const calculatedHeight = width * 0.5;
+        const newHeight = Math.max(120, Math.min(calculatedHeight, 260));
+        setContainerHeight(newHeight);
+      }
+    };
+
+    updateHeight();
+
+    const resizeObserver = new ResizeObserver(() => {
+      requestAnimationFrame(updateHeight);
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   const handleFileChange = (file: File) => {
     console.log("File selected:", file.name, file.type);
     const reader = new FileReader();
@@ -27,13 +53,18 @@ export const ImageInput: React.FC<ImageInputProps> = ({ onImageSelect }) => {
 
   return (
     <div
-      className="border-2 border-dashed border-vscode p-8 text-center cursor-pointer mb-5 rounded transition-colors hover:border-opacity-70 hover:bg-opacity-10 bg-transparent text-vscode"
+      ref={containerRef}
+      className="w-full border-2 border-dashed border-vscode text-center cursor-pointer mb-4 rounded bg-transparent text-vscode transition-all duration-300 ease-out hover:border-opacity-70 hover:bg-opacity-5"
       onClick={handleClick}
+      style={{
+        height: `${containerHeight}px`,
+        minHeight: "120px",
+        maxHeight: "260px",
+      }}
     >
-      <div className="space-y-2">
-        <p className="text-vscode font-medium">Click to select an image file</p>
-        <p className="text-vscode text-sm opacity-70">
-          Supports JPG, PNG, GIF, WebP formats
+      <div className="h-full flex flex-col items-center justify-center px-4">
+        <p className="text-sm text-vscode font-medium transition-colors duration-300">
+          Click to select an image file
         </p>
       </div>
       <input
