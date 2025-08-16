@@ -35,7 +35,6 @@ body {
   overflow: hidden;
 }
 
-/* VS Code Utility Classes */
 .text-vscode {
   color: var(--vscode-foreground);
 }
@@ -58,4 +57,107 @@ body {
 
 .bg-vscode-sidebar {
   background: var(--vscode-sideBar-background);
+}
+
+/* URL Input Styles */
+input[type="url"] {
+  background-color: var(
+    --vscode-input-background,
+    var(--vscode-editor-background)
+  );
+  border: 1px solid
+    var(--vscode-input-border, var(--vscode-editorWidget-border));
+  color: var(--vscode-input-foreground, var(--vscode-foreground));
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  padding: 4px 8px;
+  min-height: 26px;
+  outline: none;
+}
+
+input[type="url"]:focus {
+  border-color: var(--vscode-focusBorder);
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+}
+
+/* Custom Select Styles */
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background-color: var(
+    --vscode-dropdown-background,
+    var(--vscode-input-background)
+  );
+  color: var(--vscode-dropdown-foreground, var(--vscode-input-foreground));
+  border: 1px solid var(--vscode-dropdown-border, var(--vscode-input-border));
+  border-radius: 2px;
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  padding: 4px 8px;
+  min-height: 26px;
+  cursor: pointer;
+  outline: none;
+}
+
+.custom-select-trigger:focus {
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+  border-color: var(--vscode-focusBorder);
+}
+
+.custom-select-arrow {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.custom-select-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.custom-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: var(
+    --vscode-dropdown-listBackground,
+    var(--vscode-dropdown-background)
+  );
+  border: 1px solid var(--vscode-dropdown-border, var(--vscode-input-border));
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  max-height: 200px;
+  overflow-y: auto;
+  outline: 1px solid var(--vscode-focusBorder);
+  outline-offset: -1px;
+  border-color: var(--vscode-focusBorder);
+}
+
+.custom-select-option {
+  padding: 4px 8px;
+  cursor: pointer;
+  color: var(--vscode-dropdown-foreground, var(--vscode-input-foreground));
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  background-color: transparent;
+}
+
+.custom-select-option:hover,
+.custom-select-option.focused {
+  background-color: var(
+    --vscode-list-hoverBackground,
+    var(--vscode-list-focusBackground, #2a2d2e)
+  );
+  color: var(--vscode-list-hoverForeground, var(--vscode-list-focusForeground));
 }
